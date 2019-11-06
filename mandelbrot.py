@@ -11,7 +11,7 @@ class FractalDisplay(tk.Tk):
         self.title("The Fractal")
         self.geometry('1200x1000')
 
-        self.resolution = 400
+        self.resolution = 100
         self.the_grid_canvas = tk.Canvas(self)
         self.the_grid_canvas.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
 
@@ -24,6 +24,7 @@ class FractalDisplay(tk.Tk):
     def draw_fractal(self):
         a_bitmap = [[[0, 0, 0] for _ in range(2 * self.resolution)] for _ in range(2 * self.resolution)]
         self.the_image = tk.PhotoImage(width=2 * self.resolution, height=2 * self.resolution)
+        offset = complex(-.75, .11)
         for i in range(-self.resolution, self.resolution):
             print(i)
             for j in range(-self.resolution, self.resolution):
@@ -31,9 +32,15 @@ class FractalDisplay(tk.Tk):
                 num_steps = 0
                 while abs(c) < 10 and num_steps < self.max_steps:
                     num_steps += 1
-                    c = c ** 2 - 1
+                    # mandelbrot
+                    # c = c ** 2 - 1
+                    # julia
+                    # if c != 0:
+                    # c = (1 + c ** 2) / (2 * c)
+                    # fatou
+                    c = c**2 + offset
                 if num_steps == self.max_steps:
-                    a_bitmap[i + self.resolution][j + self.resolution] = (0, 255, 0)
+                    a_bitmap[i + self.resolution][j + self.resolution] = [0, 0, 255]
         for i in range(2 * self.resolution):
             for j in range(2 * self.resolution):
                 self.the_image.put('#%02x%02x%02x' % tuple(a_bitmap[i][j]), (i, j))
